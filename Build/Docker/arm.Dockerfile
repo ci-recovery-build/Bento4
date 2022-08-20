@@ -2,9 +2,11 @@ FROM arm64v8/ubuntu:20.04
 
 # Setup environment variables
 ENV BENTO4_VERSION 1.6.0-639
-ENV DEBIAN_FRONTEND=noninteractive 
-ENV TZ=Etc/UTC 
-RUN apt-get update && apt-get -y install tzdata
+ENV TZ=Asia/Dubai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+RUN apt update
+RUN apt install -y tzdata
 # Install Dependencies
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
     build-essential \
@@ -33,9 +35,12 @@ ARG BENTO4_VERSION
 LABEL "com.example.vendor"="Axiomatic Systems, LLC."
 LABEL version=$BENTO4_VERSION
 LABEL maintainer="bok@bok.net"
-ENV DEBIAN_FRONTEND=noninteractive 
-ENV TZ=Etc/UTC 
-RUN apt-get update && apt-get -y install tzdata# Setup environment variables
+ENV TZ=Asia/Dubai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+RUN apt update
+RUN apt install -y tzdata
+# Setup environment variables
 ENV PATH=/opt/bento4/bin:${PATH}
 
 # Install Dependencies
