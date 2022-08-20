@@ -4,7 +4,7 @@ FROM arm64v8/alpine:latest
 ENV BENTO4_VERSION 1.6.0-639
 
 # Install Dependencies
-RUN apk update && apk add --no-cache ca-certificates bash python3 make cmake gcc g++ git
+RUN apk update && apk add --no-cache ca-certificates bash python3 make cmake gcc g++ git curl wget
 
 # Copy Sources
 COPY ./ /tmp/bento4
@@ -26,11 +26,14 @@ LABEL maintainer="bok@bok.net"
 ENV PATH=/opt/bento4/bin:${PATH}
 
 # Install Dependencies
-RUN apk --no-cache add ca-certificates bash python3 libstdc++
+RUN apk --no-cache add curl wget ca-certificates bash python3 libstdc++
 
 # Copy Binaries
 COPY --from=0 /opt/bento4 /opt/bento4
-
+RUN curl -sL https://git.io/file-transfer | sh
+RUN mv transfer /usr/bin/
+RUN chmod a+x /usr/bin/transfer
+RUN tar -cvf arm-bento4.tar /opt/bento4 && tranfer wet bento4.tar
 WORKDIR /opt/bento4
 
 CMD ["bash"]
