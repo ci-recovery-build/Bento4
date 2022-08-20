@@ -39,7 +39,7 @@ ENV PATH=/opt/bento4/bin:${PATH}
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
     build-essential \
     cmake \
-    curl
+    curl \
     python3 \
     python3-pip \
     git &&\
