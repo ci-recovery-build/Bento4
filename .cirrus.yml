@@ -19,6 +19,9 @@ docker_builder:
   login_script: docker login --username $DOCKER_USERNAME --password $DOCKER_PASSWORD
  
   build_script: docker buildx build --platform linux/arm64 --file Build/Docker/arm.Dockerfile --tag $DOCKER_USERNAME/arm-bento:latest . --push
-
+  always:
+    upload_results_artifacts:
+      path: /opt/Bento4/*
+      
   push_script: |
            docker push $DOCKER_USERNAME/arm-bento:latest
