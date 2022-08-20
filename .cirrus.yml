@@ -13,9 +13,12 @@ docker_builder:
     DOCKER_PASSWORD: ENCRYPTED[9d88c5fccb7243974e55c2de8d0d9adeee91228c71102c4ad1c239c0087bc3eb72ebfb66c5094a20d127befed69259ca]
   docker_builder:
   setup_script:
-    - docker buildx create --name multibuilder
-    - docker buildx use multibuilder
-    - docker buildx inspect --bootstrap
+     - docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+     - docker buildx create --name multiarch --driver docker-container --use
+     - docker buildx inspect --bootstrap
+#    - docker buildx create --name multibuilder
+#    - docker buildx use multibuilder
+#    - docker buildx inspect --bootstrap
   login_script: docker login --username $DOCKER_USERNAME --password $DOCKER_PASSWORD
  
   build_script: docker buildx build --platform linux/arm64 --file Build/Docker/arm.Dockerfile --tag $DOCKER_USERNAME/arm-bento:latest . --push
