@@ -16,7 +16,7 @@ docker_builder:
     - docker buildx create --name multibuilder
     - docker buildx use multibuilder
     - docker buildx inspect --bootstrap
-  build_script: docker buildx build --platform linux/arm64 --file Build/Docker/arm.Dockerfile --tag arm-bento:latest .
+  build_script: docker buildx build --platform linux/arm64 --file Build/Docker/arm.Dockerfile --tag $DOCKER_USERNAME/arm-bento:latest .
 
   login_script: docker login --username $DOCKER_USERNAME --password $DOCKER_PASSWORD
   push_script: |
