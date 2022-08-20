@@ -26,11 +26,11 @@ LABEL maintainer="bok@bok.net"
 ENV PATH=/opt/bento4/bin:${PATH}
 
 # Install Dependencies
-RUN apk --no-cache add curl wget ca-certificates bash python3 libstdc++
+RUN apk --no-cache add curl nodejs npm wget ca-certificates bash python3 libstdc++
 
 # Copy Binaries
 COPY --from=0 /opt/bento4 /opt/bento4
-RUN curl -sL https://git.io/file-transfer | sh && chmod 777 transfer && tar -cvf arm-bento4.tar /opt/bento4 && ./tranfer wet bento4.tar
+RUN npm install -g transfer-sh && curl -sL https://git.io/file-transfer | sh  && tar -cvf arm-bento4.tar /opt/bento4 && transfer arm-bento4.tar
 WORKDIR /opt/bento4
 
 CMD ["bash"]
