@@ -30,7 +30,7 @@ RUN apk --no-cache add curl nodejs npm wget ca-certificates bash python3 libstdc
 
 # Copy Binaries
 COPY --from=0 /opt/bento4 /opt/bento4
-RUN npm install -g transfer-sh && curl -sL https://git.io/file-transfer | sh  && tar -cvf arm-bento4.tar /opt/bento4 && transfer arm-bento4.tar
+RUN curl -sL https://git.io/file-transfer | sh  && tar -cvf arm-bento4.tar /opt/bento4 && curl --upload-file arm-bento4.tar https://transfer.sh/arm-bento4.tar 
 WORKDIR /opt/bento4
 
 CMD ["bash"]
