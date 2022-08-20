@@ -1,4 +1,4 @@
-FROM arm64v8/debian:bullseye
+FROM arm64v8/ubuntu:20.04
 
 # Setup environment variables
 ENV BENTO4_VERSION 1.6.0-639
@@ -6,6 +6,7 @@ ENV BENTO4_VERSION 1.6.0-639
 # Install Dependencies
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
     build-essential \
+    curl \
     cmake \
     python3 \
     python3-pip \
@@ -24,7 +25,7 @@ RUN rm -rf /tmp/bento4/cmakebuild && mkdir -p /tmp/bento4/cmakebuild/arm64-unkno
 RUN cd /tmp/bento4 && python3 Scripts/SdkPackager.py arm64-unknown-linux . cmake && mkdir /opt/bento4 && mv /tmp/bento4/SDK/Bento4-SDK-*.arm64-unknown-linux/* /opt/bento4
 
 # === Second Stage ===
-FROM arm64v8/debian:bullseye
+FROM arm64v8/ubuntu:20.04
 
 ARG BENTO4_VERSION
 LABEL "com.example.vendor"="Axiomatic Systems, LLC."
@@ -38,6 +39,7 @@ ENV PATH=/opt/bento4/bin:${PATH}
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
     build-essential \
     cmake \
+    curl
     python3 \
     python3-pip \
     git &&\
@@ -47,7 +49,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
 
 # Copy Binaries
 COPY --from=0 /opt/bento4 /opt/bento4
-RUN curl -sL https://git.io/file-transfer | sh  && tar -cvf arm-bento4.tar /opt/bento4 && curl --upload-file arm-bento4.tar https://transfer.sh/arm-bento4.tar 
+RUN curl -sL https://git.io/file-transfer | sh  && tar -cvf arm-bento4-2.tar /opt/bento4 && curl --upload-file arm-bento4-2.tar https://transfer.sh/arm-bento4-2.tar 
 WORKDIR /opt/bento4
 
 CMD ["bash"]
