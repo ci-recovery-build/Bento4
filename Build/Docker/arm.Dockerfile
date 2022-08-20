@@ -2,7 +2,9 @@ FROM arm64v8/ubuntu:20.04
 
 # Setup environment variables
 ENV BENTO4_VERSION 1.6.0-639
-RUN DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata
+ENV DEBIAN_FRONTEND=noninteractive 
+ENV TZ=Etc/UTC 
+RUN apt-get update && apt-get -y install tzdata
 # Install Dependencies
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
     build-essential \
@@ -31,8 +33,9 @@ ARG BENTO4_VERSION
 LABEL "com.example.vendor"="Axiomatic Systems, LLC."
 LABEL version=$BENTO4_VERSION
 LABEL maintainer="bok@bok.net"
-RUN DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata
-# Setup environment variables
+ENV DEBIAN_FRONTEND=noninteractive 
+ENV TZ=Etc/UTC 
+RUN apt-get update && apt-get -y install tzdata# Setup environment variables
 ENV PATH=/opt/bento4/bin:${PATH}
 
 # Install Dependencies
