@@ -1,4 +1,4 @@
-FROM arm64v8/ubuntu:bionic
+FROM arm64/ubuntu:bionic
 
 # Setup environment variables
 ENV BENTO4_VERSION 1.6.0-639
@@ -24,7 +24,7 @@ RUN rm -rf /tmp/bento4/cmakebuild && mkdir -p /tmp/bento4/cmakebuild/arm64-unkno
 RUN cd /tmp/bento4 && python3 Scripts/SdkPackager.py arm64-unknown-linux . cmake && mkdir /opt/bento4 && mv /tmp/bento4/SDK/Bento4-SDK-*.arm64-unknown-linux/* /opt/bento4
 
 # === Second Stage ===
-FROM arm64v8/ubuntu:bionic
+FROM arm64/ubuntu:bionic
 ARG BENTO4_VERSION
 LABEL "com.example.vendor"="Axiomatic Systems, LLC."
 LABEL version=$BENTO4_VERSION
