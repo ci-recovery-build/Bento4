@@ -1,10 +1,18 @@
-FROM arm64v8/alpine:latest
+FROM arm64v8/ubuntu:20.04
 
 # Setup environment variables
 ENV BENTO4_VERSION 1.6.0-639
 
 # Install Dependencies
-RUN apk update && apk add --no-cache ca-certificates bash python3 make cmake gcc g++ git curl wget
+RUN apt-get update && apt-get upgrade -y && apt-get install -y \
+    build-essential \
+    cmake \
+    python3 \
+    python3-pip \
+    git &&\
+    pip3 install invoke &&\
+    update-alternatives --install /usr/bin/python python /usr/bin/python3 1 &&\
+    update-alternatives --set python /usr/bin/python3
 
 # Copy Sources
 COPY ./ /tmp/bento4
@@ -16,7 +24,7 @@ RUN rm -rf /tmp/bento4/cmakebuild && mkdir -p /tmp/bento4/cmakebuild/arm64-unkno
 RUN cd /tmp/bento4 && python3 Scripts/SdkPackager.py arm64-unknown-linux . cmake && mkdir /opt/bento4 && mv /tmp/bento4/SDK/Bento4-SDK-*.arm64-unknown-linux/* /opt/bento4
 
 # === Second Stage ===
-FROM arm64v8/alpine:latest
+FROM arm64v8/ubuntu:20.04
 ARG BENTO4_VERSION
 LABEL "com.example.vendor"="Axiomatic Systems, LLC."
 LABEL version=$BENTO4_VERSION
@@ -26,7 +34,15 @@ LABEL maintainer="bok@bok.net"
 ENV PATH=/opt/bento4/bin:${PATH}
 
 # Install Dependencies
-RUN apk --no-cache add curl nodejs npm wget ca-certificates bash python3 libstdc++
+RUN apt-get update && apt-get upgrade -y && apt-get install -y \
+    build-essential \
+    cmake \
+    python3 \
+    python3-pip \
+    git &&\
+    pip3 install invoke &&\
+    update-alternatives --install /usr/bin/python python /usr/bin/python3 1 &&\
+    update-alternatives --set python /usr/bin/python3
 
 # Copy Binaries
 COPY --from=0 /opt/bento4 /opt/bento4
